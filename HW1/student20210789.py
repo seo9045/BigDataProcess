@@ -10,10 +10,10 @@ ws.cell(row=1, column=8).value = 'Grade'
 total_list = []
 
 for row in range(2, ws.max_row + 1):
-    midterm = sheet.cell(row=row, column=3).value
-    final = sheet.cell(row=row, column=4).value
-    homework = sheet.cell(row=row, column=5).value
-    attendance = sheet.cell(row=row, column=6).value
+    midterm = ws.cell(row=row, column=3).value
+    final = ws.cell(row=row, column=4).value
+    homework = ws.cell(row=row, column=5).value
+    attendance = ws.cell(row=row, column=6).value
 
     total = (midterm * 0.3) + (final * 0.35) + (homework * 0.34) + (attendance * 0.01)
     ws.cell(row=row, column=7).value = total
