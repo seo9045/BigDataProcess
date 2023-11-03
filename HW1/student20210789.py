@@ -4,46 +4,48 @@ import openpyxl
 wb = openpyxl.load_workbook('student.xlsx')
 ws = wb.active
 
-midterm_num = 3
-final_num = 4
-homework_num = 5
-attendance_num = 6
-total_num = 7
+ws.cell(row=1, column=7).value = 'Total'
+ws.cell(row=1, column=8).value = 'Grade'
 
-midterm_w = 0.3
-final_w = 0.35
-homework_w = 0.34
-attendance_w = 0.01
+total_list = []
 
-def total_grade(total):
+for row in range(2, ws.max_row + 1):
+    midterm = sheet.cell(row=row, column=3).value
+    final = sheet.cell(row=row, column=4).value
+    homework = sheet.cell(row=row, column=5).value
+    attendance = sheet.cell(row=row, column=6).value
+
+    total = (midterm * 0.3) + (final * 0.35) + (homework * 0.34) + (attendance * 0.01)
+    ws.cell(row=row, column=7).value = total
+    total_list.append(total)
+
+total_list.sort(reverse=True)
+
+for row in range(2, ws.max_row + 1):
+    total = ws.cell(row=row, column=7).value
+
     if total < 40:
-       return "F"
-    elif total >= 95:
-       return "A+"
-    elif total >= 90:
-       return "A0"
-    elif total >= 85:
-       return "B+"
-    elif total >= 80:
-       return "B0"
-    elif total >= 40:
-       return "C+"
+        grade = 'F'
     else:
-       return "C0"
+        score_a = int(len(total_list) * 0.3)
+        score_b = int(len(total_list) * 0.7)
+        score_a_plus = min(int(score_a * 0.5), len(total_list) - score_a)
+        score_b_plus = min(int(score_b * 0.5), len(total_list) - score_a - score_b)
 
-row_index = 2
-for row in ws.iter_rows(min_row=2, values_only=True):
-    midterm = row[midterm_num]
-    final = row[final_num]
-    homework = row[homework_num]
-    attendance = row[attendance_num]
+        if total in total_list[:score_a]:
+            grade = 'A'
+        elif total in total_list[score_a:score_a + score_a_plus]:
+            grade = 'A+'
+        elif total in total_list[score_a + score_a_plus:score_a + score_b]:
+            grade = 'B'
+        elif total in total_list[score_a + score_b:score_a + score_b + score_b_plus]:
+            grade = 'B+'
+        elif total in total_list[score_a + score_b + score_b_plus:]:
+            grade = 'C0'
+        else:
+            grade = 'C+'
 
-    total_score = (midterm * midterm_w + final * final_w + homework_w + attendance_w)
-    grade = total_grade(total_score)
-
-    ws.cell(row=row_index, column=total_num, value=total_score)
-    ws.cell(row=row_index, column=total_num+1, value=grade)
-    row_index += 1
+    ws.cell(row=row, column=8).value = grade
 
 wb.save("student_total.xlsx")
 wb.close()
