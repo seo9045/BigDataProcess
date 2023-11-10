@@ -23,6 +23,6 @@ if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("Usage: python3 IMDBStudent20151047.py input_f output_f")
     else:
-        input_f = sys.argv[2]
-        output_f = sys.argv[3]
+        input_f = sys.argv[1]
+        output_f = sys.argv[2]
         count_genre(input_f, output_f)
