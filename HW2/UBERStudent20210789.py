@@ -1,16 +1,8 @@
-from datetime tmport datetime
+import sys
+from datetime import datetime
 
 def count_trip(input_f, output_f):
-    week = {
-        "Mon": "월",
-        "Tue": "화",
-        "Wed": "수",
-        "Thu": "목",
-        "Fri": "금",
-        "Sat": "토",
-        "Sun": "일"
-    }
-
+    
     trip = {}
 
     with open(input_f, 'r') as f:
@@ -20,28 +12,30 @@ def count_trip(input_f, output_f):
         data = line.strip().split(',')
         location = data[0]
         date_str = data[1]
-        car = int(data[2])
+        car_count = int(data[2])
+        trip_count = int(data[3])
 
-        date = datetime.strptime(date_str, "%m/%d/%Y")
-        day_name = date.strftime("%a")
+        date = datetime.strptime(date_str, '%m/%d/%Y')
+        day_name = date.strftime('%a').upper()
 
-        if day_name in week: 
-            day_week = week[day_name] 
+        if (location, day_name) in trip:
+            trip[(location, day_name)]['car_count'] += car_count
+            trip[(location, day_name)]['trip_count'] += trip_count
+        else:
+            trip[(location, day_name)] = {'car_count': car_count, 'trip_count': trip_count}
 
-            if (location, day_name) in trip:
-                trip[(location, day_week)]['trips'] += 1
-                trip[(location, day_week)]['car'] += car
-            else:
-                trips_by_weekday[(location, day_week)] = {'trips': 1, 'car': car}
+    sorted_result = sorted(trip.items(), key=lambda x: (x[0][0], ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].index(x[0][1])))
 
     with open(output_f, 'w') as f:
-        for key, value in trip.items():
-            location, day = key
-            trips = value['trips']
-            cars = value['car']
-            f.write(f"{location},{day} {cars},{trips}\n")
+        for (location, day_name), data in sorted_result:
+            car_count = data['car_count']
+            trip_count = data['trip_count']
+            f.write(f"{location}, {day_name}, {car_count}, {trip_count}\n")
 
-input_f = "uber_exp.txt"
-output_f = "output.txt"
-
-count_trip(input_f, output_f)
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Rewrite")
+    else:
+        input_f = sys.argv[1]
+        output_f = sys.argv[2]
+        count_trip(input_f, output_f)
