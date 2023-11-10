@@ -21,7 +21,7 @@ def count_genre(input_f, output_f):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python3 IMDBStudent20151047.py input_f output_f")
+        print("Rewrite")
     else:
         input_f = sys.argv[1]
         output_f = sys.argv[2]
