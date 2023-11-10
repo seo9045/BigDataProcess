@@ -1,3 +1,5 @@
+import sys
+
 def count_genre(input_f, output_f):
     genre_count = {}
 
@@ -17,7 +19,10 @@ def count_genre(input_f, output_f):
         for genre, count in genre_count.items():
             f.write(f"{genre} {count}\n")
 
-input_f = "movies_exp.txt"
-output_f = "movieoutput.txt"
-
-count_genre(input_f, output_f)
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print("Usage: python3 IMDBStudent20151047.py input_f output_f")
+    else:
+        input_f = sys.argv[2]
+        output_f = sys.argv[3]
+        count_genre(input_f, output_f)
