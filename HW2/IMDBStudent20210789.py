@@ -20,7 +20,7 @@ def count_genre(input_f, output_f):
             f.write(f"{genre} {count}\n")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 3:
         print("Usage: python3 IMDBStudent20151047.py input_f output_f")
     else:
         input_f = sys.argv[2]
